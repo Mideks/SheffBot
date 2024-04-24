@@ -4,6 +4,7 @@ from aiogram.filters.callback_data import CallbackData
 
 
 class NavigateButtonLocation(enum.Enum):
+    StartSearch = "StartSearch"
     Search = "Search"
 
 
