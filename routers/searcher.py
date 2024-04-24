@@ -5,6 +5,7 @@ from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+import db_functions
 import keyboards
 import states
 import texts
@@ -43,6 +44,14 @@ async def search_handler(callback: CallbackQuery, state: FSMContext) -> None:
     await state.set_state(None)
     await callback.message.edit_text(texts.wait_for_result)
     await callback.message.chat.do('typing')
-    await sleep(3)
-    await callback.message.edit_text(texts.search_result)
+    await sleep(0)
+
+    data = await state.get_data()
+    recipes = db_functions.search_recipes_by_filters(data['search_filters'])
+    selected_recipe = recipes[0]
+    text = texts.search_result.format(
+        name=selected_recipe['name'],
+        cookingTime=selected_recipe['cookingTime'])
+
+    await callback.message.edit_text(text)
     await callback.answer()
