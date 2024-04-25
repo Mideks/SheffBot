@@ -8,7 +8,7 @@ def get_menu_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.button(text="👀 Давай начнём!",
-                   callback_data=NavigateButton(location=NavigateButtonLocation.Search))
+                   callback_data=NavigateButton(location=NavigateButtonLocation.SearchByProductList))
 
     return builder.as_markup()
 
@@ -37,7 +37,7 @@ def get_search_result_keyboard() -> InlineKeyboardMarkup:
     builder.button(text="🎲 Другой рецепт",
                    callback_data=NavigateButton(location=NavigateButtonLocation.NewSearch))
     builder.button(text="🥕 Другие продукты",
-                   callback_data=NavigateButton(location=NavigateButtonLocation.Search))
+                   callback_data=NavigateButton(location=NavigateButtonLocation.SearchByProductList, data='new'))
 
     builder.adjust(1)
     return builder.as_markup()

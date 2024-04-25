@@ -16,13 +16,25 @@ from search_filters import SearchFilters
 router = Router()
 
 
-@router.callback_query(NavigateButton.filter(F.location == NavigateButtonLocation.Search))
-async def search_handler(callback: CallbackQuery, state: FSMContext) -> None:
-    await callback.message.edit_text(texts.search, reply_markup=keyboards.get_waiting_for_food_list_keyboard())
-    await state.update_data(search_filters=SearchFilters())
-    await state.set_state(states.Search.waiting_food_list)
-    await state.update_data(bot_message=callback.message)
+@router.callback_query(NavigateButton.filter(F.location == NavigateButtonLocation.SearchByProductList))
+async def search_handler(callback: CallbackQuery, state: FSMContext, callback_data: NavigateButton) -> None:
+    send_as_new = callback_data.data == 'new'
+    await send_search_by_product_list_message(callback.message, state, send_as_new)
     await callback.answer()
+
+
+async def send_search_by_product_list_message(message: Message, state: FSMContext, send_as_new=False):
+    if send_as_new:
+        bot_message = await message.answer(
+            texts.search_by_product_list, reply_markup=keyboards.get_waiting_for_food_list_keyboard())
+        await message.delete()
+        await state.update_data(bot_message=bot_message)
+    else:
+        await message.edit_text(
+            texts.search_by_product_list, reply_markup=keyboards.get_waiting_for_food_list_keyboard())
+
+    await state.set_state(states.Search.waiting_food_list)
+    await state.update_data(search_filters=SearchFilters())
 
 
 @router.message(states.Search.waiting_food_list)
