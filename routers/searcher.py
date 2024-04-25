@@ -20,7 +20,8 @@ router = Router()
 
 @router.callback_query(NavigateButton.filter(F.location == NavigateButtonLocation.Search))
 async def search_handler(callback: CallbackQuery, state: FSMContext) -> None:
-    await callback.message.edit_text(texts.search)
+    await callback.message.edit_text(texts.search, reply_markup=keyboards.get_waiting_for_food_list_keyboard())
+    await state.update_data(search_filters=SearchFilters())
     await state.set_state(states.Search.waiting_food_list)
     await state.update_data(bot_message=callback.message)
     await callback.answer()
@@ -70,9 +71,7 @@ async def send_search_result_message(
 @router.callback_query(NavigateButton.filter(F.location == NavigateButtonLocation.StartSearch))
 async def search_handler(callback: CallbackQuery, state: FSMContext) -> None:
     await state.set_state(None)
-    await callback.message.edit_text(texts.wait_for_result)
-    await callback.message.chat.do('typing')
-    await sleep(0)
+    await send_waiting_message(callback)
 
     data = await state.get_data()
     recipes: list[dict] = db_functions.search_recipes_by_filters(data['search_filters'])
@@ -83,6 +82,12 @@ async def search_handler(callback: CallbackQuery, state: FSMContext) -> None:
 
     await send_search_result_message(callback.message, state, selected_recipe, True)
     await callback.answer()
+
+
+async def send_waiting_message(callback):
+    await callback.message.edit_text(texts.wait_for_result)
+    await callback.message.chat.do('typing')
+    await sleep(3)
 
 
 @router.callback_query(NavigateButton.filter(F.location == NavigateButtonLocation.NewSearch))

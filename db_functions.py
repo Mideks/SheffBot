@@ -13,6 +13,8 @@ db = TinyDB('recipes/info.json')
 def search_recipes_by_filters(filters: SearchFilters) -> list[Document]:
     Recipe = Query()
     products = [ingredient.lower() for ingredient in filters.products]
+    if len(products) == 0:
+        return db.all()
 
     def contains_ingredient(ingredients):
         for ingredient in ingredients:

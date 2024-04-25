@@ -22,6 +22,15 @@ def get_food_list_entering_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
+def get_waiting_for_food_list_keyboard() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.button(text="🔎 Продолжить без списка",
+                   callback_data=NavigateButton(location=NavigateButtonLocation.StartSearch))
+
+    return builder.as_markup()
+
+
 def get_search_result_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
@@ -30,4 +39,5 @@ def get_search_result_keyboard() -> InlineKeyboardMarkup:
     builder.button(text="🥕 Другие продукты",
                    callback_data=NavigateButton(location=NavigateButtonLocation.Search))
 
+    builder.adjust(1)
     return builder.as_markup()
