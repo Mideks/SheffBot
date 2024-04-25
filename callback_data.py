@@ -5,6 +5,9 @@ from aiogram.filters.callback_data import CallbackData
 
 
 class NavigateButtonLocation(enum.Enum):
+    RecipeStage = "RecipeStage"
+    RecipeCard = "RecipeCard"
+    RecipeStages = "RecipeStages"
     NewSearch = "NewSearch"
     StartSearch = "StartSearch"
     SearchByProductList = "SearchByProductList"
