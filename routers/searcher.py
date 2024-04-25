@@ -3,7 +3,6 @@ import random
 from asyncio import sleep
 
 from aiogram import F, Router
-from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
 
@@ -11,7 +10,6 @@ import db_functions
 import keyboards
 import states
 import texts
-from keyboards import get_menu_keyboard
 from callback_data import NavigateButton, NavigateButtonLocation
 from search_filters import SearchFilters
 
@@ -44,9 +42,16 @@ async def food_list_handler(message: Message, state: FSMContext) -> None:
 
 async def send_search_result_message(
         message: Message, state: FSMContext, recipe: dict, send_as_new: bool = False):
+    ingredients = [
+        f"{recipe['name']} - {recipe['quantity']} {recipe['unit']}"
+        for recipe in recipe['ingredients']
+    ]
+
     text = texts.search_result.format(
         name=recipe['name'],
-        cookingTime=recipe['cookingTime']
+        cookingTime=recipe['cookingTime'],
+        calories=recipe['calories'],
+        ingredients='\n'.join(ingredients)
     )
 
     photo_path = 'recipes/' + recipe['photo']

@@ -15,4 +15,7 @@ food_list_entering = (
 
 wait_for_result = "Подождите, готовим ваше блюдо..."
 search_result = ("Вот что нам удалось найти:\n"
-                 "<b>{name}</b> - {cookingTime} мин.")
+                 "<b>{name}</b> - {cookingTime} мин.\n"
+                 "<b>Калории:</b> {calories} ккал\n\n"
+                 "<b>Ингридиенты:</b>\n"
+                 "{ingredients}\n")
