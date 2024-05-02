@@ -7,7 +7,7 @@ from tinydb.table import Document
 
 from search_filters import SearchFilters
 
-db = TinyDB('recipes/info.json')
+db = TinyDB('recipes/info.json', encoding='utf-8')
 
 
 def search_recipes_by_filters(filters: SearchFilters) -> list[Document]:
