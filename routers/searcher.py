@@ -63,8 +63,8 @@ async def send_search_result_message(
         message: Message, state: FSMContext, recipe: dict, send_as_new: bool = False):
     state_data: StateData = (await state.get_data())['state_data']
     ingredients = [
-        f"{recipe['name']} - {str(recipe['quantity']).lower()} {recipe['unit'].lower()}"
-        for recipe in recipe['ingredients']
+        f"{i['name']} - {str(i.get('quantity', '')).lower()} {i['unit'].lower()}"
+        for i in recipe['ingredients']
     ]
 
     text = texts.search_result.format(
@@ -74,7 +74,7 @@ async def send_search_result_message(
         ingredients='\n'.join(ingredients)
     )
 
-    photo_path = 'recipes/' + recipe['photo']
+    photo_path = f'recipes/photos/{recipe["photo"]}'
     if not os.path.exists(photo_path):
         await message.answer("Извините, не удалось отправить картинку")
         print(f"photo_path = {photo_path} не существует")
@@ -148,8 +148,8 @@ async def format_recipe_stage_text(message: Message, state_data: StateData):
     text = texts.recipe_stage.format(
         current_stage=state_data.current_stage,
         stage_count=stage_count,
-        title=stage['title'],
-        description=stage['description']
+        title=stage.get('title', None),
+        description=stage.get('description', None)
     )
 
     await message.edit_caption(
