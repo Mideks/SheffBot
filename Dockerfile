@@ -4,5 +4,5 @@ LABEL authors="mideks"
 WORKDIR /app
 COPY . .
 
-CMD pip install -r requirements.txt
-RUN ["python", "main.py"]
+RUN pip install -r requirements.txt
+CMD ["python", "main.py"]
